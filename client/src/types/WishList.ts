@@ -4,5 +4,6 @@ export interface Wishlist {
   name: string
   dueDate: string
   done: boolean
+  url?: string
   attachmentUrl?: string
 }

@@ -13,6 +13,7 @@ import {
   Image,
   Loader
 } from 'semantic-ui-react'
+import Linkify from 'react-linkify';
 
 import { createWishList, deleteWishlist, getWishLists, patchWishList } from '../api/wishlists-api'
 import Auth from '../auth/Auth'
@@ -25,7 +26,8 @@ interface WishListsProps {
 
 interface WishListsState {
   wishLists: Wishlist[]
-  newWishListName: string
+  newWishListName: string,
+  newWishListUrl: string,
   loadingWishLists: boolean
 }
 
@@ -33,11 +35,16 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
   state: WishListsState = {
     wishLists: [],
     newWishListName: '',
+    newWishListUrl: '',
     loadingWishLists: true
   }
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ newWishListName: event.target.value })
+  }
+
+  handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ newWishListUrl: event.target.value })
   }
 
   onEditButtonClick = (wishListId: string) => {
@@ -47,8 +54,10 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
   onWishListCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
       const dueDate = this.calculateDueDate()
+      console.log('state: ', this.state)
       const newWishList = await createWishList(this.props.auth.getIdToken(), {
         name: this.state.newWishListName,
+        url: this.state.newWishListUrl,
         dueDate
       })
       this.setState({
@@ -77,6 +86,7 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
       await patchWishList(this.props.auth.getIdToken(), wishList.wishListId, {
         name: wishList.name,
         dueDate: wishList.dueDate,
+        url: wishList.url,
         done: !wishList.done
       })
       this.setState({
@@ -129,10 +139,16 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
               content: 'New item',
               onClick: this.onWishListCreate
             }}
-            fluid
+            size='large'
             actionPosition="left"
             placeholder="What do you want...??"
             onChange={this.handleNameChange}
+          />
+          <Input
+            size='large'
+            actionPosition="left"
+            placeholder="URL"
+            onChange={this.handleUrlChange}
           />
         </Grid.Column>
         <Grid.Column width={16}>
@@ -195,6 +211,9 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
                 >
                   <Icon name="delete" />
                 </Button>
+              </Grid.Column>
+              <Grid.Column width={15} floated="right">
+                <Linkify>{wishList.url}</Linkify>
               </Grid.Column>
               {wishList.attachmentUrl && (
                 <Image src={wishList.attachmentUrl} size="small" wrapped />

@@ -10,6 +10,9 @@
     },
     "dueDate": {
       "type": "string"
+    },
+    "url": {
+      "type": "string"
     }
   },
   "required": [

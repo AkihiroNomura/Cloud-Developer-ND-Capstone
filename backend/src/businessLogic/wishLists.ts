@@ -25,7 +25,8 @@ export const createWishList = async (userId: string, newWishList: CreateWishList
     createdAt: new Date().toISOString(),
     name: newWishList.name,
     dueDate: newWishList.dueDate,
-    done: false
+    done: false,
+    url: newWishList.url,
   })
 }
 
