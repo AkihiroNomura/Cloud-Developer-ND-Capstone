@@ -28,6 +28,7 @@ interface WishListsState {
   wishLists: Wishlist[]
   newWishListName: string,
   newWishListUrl: string,
+  newPhoneNumber: string,
   loadingWishLists: boolean
 }
 
@@ -36,6 +37,7 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
     wishLists: [],
     newWishListName: '',
     newWishListUrl: '',
+    newPhoneNumber: '',
     loadingWishLists: true
   }
 
@@ -45,6 +47,10 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
 
   handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ newWishListUrl: event.target.value })
+  }
+
+  handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ newPhoneNumber: event.target.value })
   }
 
   onEditButtonClick = (wishListId: string) => {
@@ -58,7 +64,8 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
       const newWishList = await createWishList(this.props.auth.getIdToken(), {
         name: this.state.newWishListName,
         url: this.state.newWishListUrl,
-        dueDate
+        dueDate,
+        phoneNumber: this.state.newPhoneNumber
       })
       this.setState({
         wishLists: [...this.state.wishLists, newWishList],
@@ -150,7 +157,14 @@ export class WishLists extends React.PureComponent<WishListsProps, WishListsStat
             placeholder="URL"
             onChange={this.handleUrlChange}
           />
+          <Input
+            size='large'
+            actionPosition="left"
+            placeholder="+12223334444"
+            onChange={this.handlePhoneNumberChange}
+          />
         </Grid.Column>
+        <>URL and phone number are optional. Phone number is used to notify you when you update items on your wish list.</>
         <Grid.Column width={16}>
           <Divider />
         </Grid.Column>

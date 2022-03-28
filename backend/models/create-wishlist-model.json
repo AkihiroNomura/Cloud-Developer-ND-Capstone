@@ -13,6 +13,9 @@
     },
     "url": {
       "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
     }
   },
   "required": [

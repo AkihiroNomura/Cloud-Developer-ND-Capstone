@@ -90,6 +90,10 @@ functions:
           - dynamodb:GetItem
           - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.WISHLISTS_TABLE}
+      - Effect: "Allow"
+        Resource: "*"
+        Action:
+          - "sns:Publish"
 
   DeleteWishList:
     handler: src/lambda/http/deleteWishList.handler

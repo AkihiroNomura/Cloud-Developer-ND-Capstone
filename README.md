@@ -18,6 +18,7 @@ The application should store wish list items, and each wish list item contains t
 - `dueDate` (string) - date and time by which a wish list item should be completed
 - `done` (boolean) - true if a wish list item was gotten, false otherwise
 - `url` (string) (optional) - a URL pointing to information of a wish list item
+- `phoneNumber` (string) (optional) - a phone number to notify update a wishlist item
 - `attachmentUrl` (string) (optional) - a URL pointing to an image attached to a wish list item
 
 You might also store an id of a user who created a wish list item.

@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 
-import { updateWishList } from '../../businessLogic/wishLists'
+import { updateWishList, getWishListForUser, sendTxtNotification } from '../../businessLogic/wishLists'
 import { UpdateWishListRequest } from '../../requests/UpdateWishListRequest'
 import { getUserId } from '../utils'
 import { createLogger } from '../../utils/logger'
@@ -20,6 +20,11 @@ export const handler = middy(
 
     const userId = getUserId(event)
     await updateWishList(userId, wishListId, updatedWishList)
+
+    const wishList = await getWishListForUser(userId, wishListId)
+    if (wishList.phoneNumber) {
+      await sendTxtNotification(wishList.phoneNumber, `Your wishlist ${wishListId} was updated!`, 'Wishlist Notification')
+    }
 
     return {
       statusCode: 200,

@@ -1,5 +1,6 @@
 import { WishListsAccess } from '../dataLayer/wishListsAcess'
 import { AttachmentUtils } from '../fileStogare/AttachmentUtils'
+import { SendNotification } from '../SNS/sendNotification';
 import { WishListItem } from '../models/WishListItem'
 import { CreateWishListRequest } from '../requests/CreateWishListRequest'
 import { UpdateWishListRequest } from '../requests/UpdateWishListRequest'
@@ -11,9 +12,14 @@ const logger = createLogger('wishLists')
 
 const wishListsAccess = new WishListsAccess()
 const attachmentUtils = new AttachmentUtils()
+const sendNotification = new SendNotification()
 
 export const getWishListsForUser = async (userId: string): Promise<WishListItem[]> => {
   return await wishListsAccess.getWishLists(userId)
+}
+
+export const getWishListForUser = async (userId: string, wishListId: string): Promise<WishListItem> => {
+  return await wishListsAccess.getWishList(userId, wishListId)
 }
 
 export const createWishList = async (userId: string, newWishList: CreateWishListRequest): Promise<WishListItem> => {
@@ -27,6 +33,7 @@ export const createWishList = async (userId: string, newWishList: CreateWishList
     dueDate: newWishList.dueDate,
     done: false,
     url: newWishList.url,
+    phoneNumber: newWishList.phoneNumber
   })
 }
 
@@ -55,4 +62,8 @@ export const createAttachmentPresignedUrl = (attachmentId: string) => {
 
 export const getAttachmentUrl = (attachmentId: string) => {
   return attachmentUtils.getAttachmentUrl(attachmentId)
+}
+
+export const sendTxtNotification = async (phoneNumber: string, message: string, subject: string) => {
+  await sendNotification.sendTxtNotification(phoneNumber, message, subject)
 }
