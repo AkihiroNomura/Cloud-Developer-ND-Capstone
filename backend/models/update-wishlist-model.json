@@ -13,6 +13,9 @@
     },
     "done": {
       "type": "boolean"
+    },
+    "url": {
+      "type": "string"
     }
   },
   "required": [
